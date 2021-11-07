@@ -1,0 +1,10 @@
+{
+  "msg": "successful operation",
+  "code": 201,
+  "success": true,
+  "eventId": "hawhkarglknasg",
+  "data": {
+    "memberid": "jhaefsk677",
+    "status": "success"
+  }
+}

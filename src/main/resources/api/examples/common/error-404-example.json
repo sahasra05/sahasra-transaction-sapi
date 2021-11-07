@@ -1,0 +1,11 @@
+{
+  "msg": "fail operation",
+  "code": 404,
+  "success": false,
+  "eventId": "hawhkarglknasg",
+  "error": {
+    "type": "unauthorized",
+    "title": "unautharized",
+    "details": "the uri request is invalid"
+  }
+}

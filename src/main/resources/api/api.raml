@@ -1,0 +1,61 @@
+#%RAML 1.0
+title: transaction-sapi-raml
+version: 1.0.0
+description: This system api will insert the transaction data into sfdc system
+
+traits:
+  business: !include /exchange_modules/c4f1556a-f4ea-40dd-bc79-e2c925f2b503/common-franment/1.0.0/trait/business-trait.raml
+  clientIdSecret: !include /exchange_modules/c4f1556a-f4ea-40dd-bc79-e2c925f2b503/common-franment/1.0.0/trait/clientIdecret-trait.raml
+  transaction: !include /exchange_modules/c4f1556a-f4ea-40dd-bc79-e2c925f2b503/common-franment/1.0.0/trait/transactionId-trait.raml
+
+types:
+  errordataType: !include /exchange_modules/c4f1556a-f4ea-40dd-bc79-e2c925f2b503/common-franment/1.0.0/Datatype/error-response-dataType.raml
+  postTransactionrequestdatatype: !include /datatype/post-trasnaction-request-datatype.raml 
+  postTransactionresponse: !include /datatype/post-transaction-response-datatype.raml
+
+/members:
+  /trasnaction:
+    post:
+      is:
+        - business
+        - clientIdSecret
+        - transaction
+      body:
+        application/json:
+          type: postTransactionrequestdatatype 
+          example: !include /examples/transaction/post-transaction-request-example.json
+            
+      responses:
+        201:
+          body:
+            application/json:
+              type: postTransactionresponse
+              example: !include/examples/transaction/post-transaction-response-example.json
+                
+        400:
+          body:
+            application/json:
+              type: errordataType
+              example: !include /examples/common/error-400-example.json
+                
+        401:
+          body:
+            application/json:
+              type: errordataType
+              example: !include /examples/common/error-401-example.json
+            
+        404:
+          body:
+            application/json:
+              type: errordataType
+              example: !include /examples/common/error-404-example.json
+                
+        500:
+          body:
+            application/json:
+              type: errordataType
+              example: !include/examples/common/error-500-example.json
+                
+              
+                      
+            

@@ -1,0 +1,15 @@
+apiName: "transaction-sapi-app"
+
+sfdc:
+ userName: "vijayasri@infosys.com"
+ 
+ 
+ 
+ 
+ http:
+  listener:
+   host: "0.0.0.0"
+   port: "8091"
+ 
+ 
+ 

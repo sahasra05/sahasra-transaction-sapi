@@ -1,0 +1,11 @@
+{
+  "msg": "fail operation",
+  "code": 500,
+  "success": false,
+  "eventId": "hawhkarglknasg",
+  "error": {
+    "type": "server error",
+    "title": "internal server error",
+    "details": "the server encountered an unexpected condition"
+  }
+}

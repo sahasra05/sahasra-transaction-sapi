@@ -1,0 +1,43 @@
+#%RAML 1.0 DataType
+
+ type: object
+ properties:
+   msg:
+    description: this is contain response message
+    type: string
+    required: true
+    example: "fail"
+   code:
+    description: this is contain response code
+    type: integer
+    required: true
+    example: 400
+   success:
+    description: this is contain success
+    type: boolean
+    required: true
+    example: false
+   eventId:
+    description: this is contain event id
+    type: string
+    required: true
+    example: "jhglg134"
+   error:
+    description: this is contain response error
+    type: object
+    properties:
+      type:
+        description: this contains error type
+        type: string
+        required: true
+        example: "djr123"
+      title:
+        description: it contains title
+        type: string
+        required: true
+        example: "ufyk"
+      details:
+        description: it contains error details
+        type: string
+        required: true
+        example: "ufyk"

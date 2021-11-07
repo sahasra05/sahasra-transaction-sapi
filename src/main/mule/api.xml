@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd ">
+    <http:listener-config name="api-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+    <apikit:config name="api-config" api="api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <flow name="api-main">
+        <http:listener config-ref="api-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <flow-ref doc:name="Flow Reference" doc:id="1e2b96b7-6114-47c9-9f22-c2e9876ccebc" name="initialize-request-variable-commonSub_Flow"/>
+		<apikit:router config-ref="api-config" />
+        <error-handler ref="apikit-global-errorError_Handler">
+            
+        </error-handler>
+    </flow>
+    <flow name="api-console">
+        <http:listener config-ref="api-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="api-config" />
+		<error-handler ref="apikit-global-errorError_Handler" />
+    </flow>
+    <flow name="post:\members\trasnaction:application\json:api-config">
+		<logger level="INFO" doc:name="request Logger for post Transaction" doc:id="e73ebbd9-c7a1-40f9-a019-39b956ea271b" message="#[%dw 2.0&#10;output application/json indent=false&#10;---&#10;{&#10;TimeStamp: vars.requestTime_var,&#10;transactionId: vars.headers_var.'X-lyt-transactionID',&#10;apiName: api.name,&#10;flowName: flow.name,&#10;BusinessProcessname: &quot;post-Transaction-salesforce&quot;,&#10;catagory: &quot;transaction&quot;,&#10;originatingApi_location: &quot;front end&quot;,&#10;DestinationApp_location: &quot;sales force&quot;,&#10;customerId: &quot;vars.requestPayload_var.memberId&quot;,&#10;txn_state: &quot;start&quot;&#10;}]"/>
+		<flow-ref doc:name="Flow Reference call post-transaction-implementationSub_Flow" doc:id="00b60b32-b2c2-44ae-a8e2-2c7f1594e388" name="post-transaction-implementationSub_Flow"/>
+		<logger level="INFO" doc:name="Response Logger for post Transaction" doc:id="00ad5299-7fe5-488a-a226-1a330e486751" message="#[%dw 2.0&#10;output application/json indent=false&#10;---&#10;{&#10;TimeStamp: now(),&#10;transactionId: vars.headers_var.'X-lyt-transactionID',&#10;apiName: p('apiName'), &#10;flowName: flow.name,&#10;BusinessProcessname: &quot;post-Transaction-salesforce&quot;,&#10;catagory: &quot;transaction&quot;,&#10;originatingApi_location: &quot;front end&quot;,&#10;DestinationApp_location: &quot;salesforce&quot;,&#10;customerId: &quot;vars.requestPayload_var.memberId&quot;,&#10;txn_state: &quot;end&quot;&#10;}]"/>
+		<error-handler ref="global-app-errorError_Handler" />
+    </flow>
+</mule>

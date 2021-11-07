@@ -1,0 +1,11 @@
+{
+  "msg": "fail operation",
+  "code": 401,
+  "success": false,
+  "eventId": "hawhkarglknasg",
+  "error": {
+    "type": "unauthorized",
+    "title": "unautharized",
+    "details": "the endpoint required all request authentacited"
+  }
+}

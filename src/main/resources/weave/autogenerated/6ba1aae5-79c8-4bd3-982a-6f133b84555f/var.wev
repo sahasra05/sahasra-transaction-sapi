@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_6ba1aae5_79c8_4bd3_982a_6f133b84555f_Output_Variables_queryparams_var = {|  |}
+

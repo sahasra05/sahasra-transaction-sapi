@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd">
+	<sub-flow name="post-transaction-implementationSub_Flow" doc:id="e424b449-5bec-4452-8932-d9c5908e1c6d" >
+		<ee:transform doc:name="Transform Message" doc:id="1508b04a-1cc4-4eb3-9229-b8494d9cce4d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+[  
+	
+	   "memberId__c" : vars.requestpayload_var.memberId,
+	   "transactionId__c" : vars.requestpayload_var.transactionId,
+	   "amount__c": vars.requestpayload_var.amount as Number,
+	   "memberTier__c" : vars.requestpayload_var.memberTier,
+	   "transactionDate__c" : vars.requestpayload_var.transactionDate
+	    
+	   
+    
+
+]]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="sfdc request Logger for post transaction" doc:id="ea007b90-bfb0-4b29-aae1-ed9e9acd1e0a" message="#[{&#10;TimeStamp: vars.requestTime_var,&#10;transactionId: vars.headers_var.'X-lyt-transactionID',&#10;apiName: p('apiName'),&#10;flowName: flow.name,&#10;BusinessProcessname: &quot;post-Transaction-salesforce&quot;,&#10;catagory: &quot;transaction&quot;,&#10;originatingApi_location: &quot;front end&quot;,&#10;DestinationApp_location: &quot;sales force&quot;,&#10;customerId: &quot;vars.requestPayload_var.memberId&quot;,&#10;txn_state: &quot;start&quot;&#10;}]" />
+		<salesforce:create doc:name="Create" doc:id="f9da7eab-8c7f-4e80-b9be-aca9091591b7" config-ref="Salesforce_Config2" type="transaction__c"/>
+		<logger level="INFO" doc:name="sfdc response Logger for post transaction" doc:id="64ceba4f-8899-4b86-aa61-758d0c57734e" message="#[{&#10;TimeStamp: now(),&#10;transactionId: vars.headers_var.'X-lyt-transactionID',&#10;apiName: P('apiName'),&#10;flowName: flow.name,&#10;BusinessProcessname: &quot;post-Transaction-salesforce&quot;,&#10;catagory: &quot;transaction&quot;,&#10;originatingApi_location: &quot;front end&quot;,&#10;DestinationApp_location: &quot;sales force&quot;,&#10;customerId: &quot;vars.requestPayload_var.memberId&quot;,&#10;txn_state: &quot;sfdc response&quot;&#10;}]" />
+		<ee:transform doc:name="Transform Message" doc:id="411278a0-1273-4918-b15c-fbbaf35ed590" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  msg: "fail operation",
+  code: 400,
+  success: false,
+  eventId: "hawhkarglhgjhsgdgsgdsdbbdd111",
+  error: {
+    "type": "bad request",
+    title: "invalid request",
+    details: "the input contains invalid data"
+  }
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+</mule>
